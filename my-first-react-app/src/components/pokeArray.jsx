@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function PokeArray() {
+export function PokeArray(score, maxScore, setMaxScore) {
   const [pokemonArray, setPokemonArray] = useState([]);
 
   async function pokemonGetter() {
@@ -26,13 +26,32 @@ export function PokeArray() {
     return tempPokeArray;
   }
 
+  const [loseToggle, setLoseToggle] = useState(false);
+
   useEffect(() => {
     pokemonArrayCreator().then((array) => setPokemonArray(array));
-  }, []);
-  //dependency should be if lose is chnages to true
+  }, [loseToggle]);
+
+  const [gameArray, setGameArray] = useState([]);
+
+  function cardClick(name) {
+    let temp = gameArray;
+    if (!temp.includes(name)) {
+      temp.push(name);
+      setGameArray(temp);
+    } else {
+      console.log("bye");
+      setLoseToggle(!loseToggle);
+      //add score to score array then find max for the array.
+    }
+  }
 
   return pokemonArray.map((pokemon) => (
-    <div key={pokemon.name} className="card">
+    <div
+      key={pokemon.name}
+      className="card"
+      onClick={() => cardClick(pokemon.name)}
+    >
       <img src={pokemon.sprite} alt={pokemon.name} />
       <p className="name">{pokemon.name}</p>
     </div>
