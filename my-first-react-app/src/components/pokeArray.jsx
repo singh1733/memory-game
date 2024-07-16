@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function PokeArray(score, maxScore, setMaxScore) {
+export function PokeArray({score, setScore, maxScore, setMaxScore}) {
   const [pokemonArray, setPokemonArray] = useState([]);
 
   async function pokemonGetter() {
@@ -39,10 +39,13 @@ export function PokeArray(score, maxScore, setMaxScore) {
     if (!temp.includes(name)) {
       temp.push(name);
       setGameArray(temp);
+      setScore(score + 1);
     } else {
       console.log("bye");
       setLoseToggle(!loseToggle);
-      //add score to score array then find max for the array.
+      setMaxScore(Math.max(score, maxScore));
+      setScore(0);
+
     }
   }
 

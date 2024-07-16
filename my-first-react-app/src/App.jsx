@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {PokeArray} from "./components/pokeArray.jsx";
+import { PokeArray } from "./components/pokeArray.jsx";
 import "./App.css";
 
 function NewGame({ lose, score, bestScore }) {
@@ -15,15 +15,24 @@ function RandomBoard({ score }) {
 }
 
 export default function App() {
- 
-  const [lose, setLose]= useState(false);
-
-
   //an array to keep user's picks
   //if a duplicate is found in array, restart game
   //if not duplicate, add to score, random board
 
+  const [score, setScore] = useState(0);
+  const [maxScore, setMaxScore] = useState(0);
+
   return (
-    <PokeArray/>
+    <div className="game">
+    <PokeArray
+      score={score}
+      setScore={setScore}
+      maxScore={maxScore}
+      setMaxScore={setMaxScore}
+    />
+    <p>{score}</p>
+    <p>{maxScore}</p>
+
+    </div>
   );
 }
