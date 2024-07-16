@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function PokeArray({score, setScore, maxScore, setMaxScore}) {
+export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
   const [pokemonArray, setPokemonArray] = useState([]);
 
   async function pokemonGetter() {
@@ -40,13 +40,23 @@ export function PokeArray({score, setScore, maxScore, setMaxScore}) {
       temp.push(name);
       setGameArray(temp);
       setScore(score + 1);
+      currentGameRandomizer();
     } else {
-      console.log("bye");
       setLoseToggle(!loseToggle);
       setMaxScore(Math.max(score, maxScore));
       setScore(0);
-
     }
+  }
+
+  function currentGameRandomizer() {
+    let randomPokeArray=[]
+    const arrayIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    for (let i = 9; i >= 0; i--) {
+      let randomIndex = Math.ceil(Math.random() * i);
+      randomPokeArray.push(pokemonArray[arrayIndices[randomIndex]]);
+      arrayIndices.splice(randomIndex, 1);
+    }
+    setPokemonArray(randomPokeArray);
   }
 
   return pokemonArray.map((pokemon) => (
