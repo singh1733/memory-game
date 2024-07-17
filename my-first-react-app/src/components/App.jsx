@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { PokeArray } from "./components/pokeArray.jsx";
-import "./App.css";
+import { PokeArray } from "./pokeArray.jsx";
+import "../styles/App.css";
 
 export default function App() {
   //an array to keep user's picks
   //if a duplicate is found in array, restart game
   //if not duplicate, add to score, random board
 
-  const [score, setScore] = useState(9);
+  const [score, setScore] = useState(0);
   const [maxScore, setMaxScore] = useState(0);
 
   function closer() {
