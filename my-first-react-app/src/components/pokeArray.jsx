@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
+import { Win } from "./win.jsx";
+
 
 export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
   const [pokemonArray, setPokemonArray] = useState([]);
 
   async function pokemonGetter() {
-    //+1 to avoid 0
-    let pokemonNumber = Math.floor(Math.random() * 150) + 1;
-    let pokemonData = await fetch(
-      "https://pokeapi.co/api/v2/pokemon/" + pokemonNumber
-    ).then((response) => response.json());
-
-    return {
-      name: pokemonData.name,
-      sprite: pokemonData.sprites.front_default,
-    };
+    try {
+      //+1 to avoid 0
+      let pokemonNumber = Math.floor(Math.random() * 150) + 1;
+      let response = await fetch(
+        "https://pokeapi.co/api/v2/pokemon/" + pokemonNumber
+      );
+      if (!response.ok) throw new Error("Network response was not ok");
+      let pokemonData = await response.json();
+      return {
+        name: pokemonData.name,
+        sprite: pokemonData.sprites.front_default,
+      };
+    } catch (error) {
+      console.error("Failed to fetch Pokémon:", error);
+      return null;
+    }
   }
 
   async function pokemonArrayCreator() {
@@ -27,11 +35,13 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
     return tempPokeArray;
   }
 
-  const [loseToggle, setLoseToggle] = useState(false);
+  const [gameStart, setGameStart] = useState(false);
 
   useEffect(() => {
     pokemonArrayCreator().then((array) => setPokemonArray(array));
-  }, [loseToggle]);
+
+    return setPokemonArray([]);
+  }, [gameStart]);
 
   const [gameArray, setGameArray] = useState([]);
 
@@ -42,16 +52,9 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
       setGameArray(temp);
       setScore(score + 1);
       currentGameRandomizer();
-      if (score === 10) {
-        console.log("you win");
-        setLoseToggle(!loseToggle);
-        setMaxScore(10);
-        setGameArray([]);
-        setScore(0);
-      }
     } else {
       setGameArray([]);
-      setLoseToggle(!loseToggle);
+      setGameStart(!gameStart);
       setMaxScore(Math.max(score, maxScore));
       setScore(0);
     }
@@ -68,16 +71,21 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
     setPokemonArray(randomPokeArray);
   }
 
-  return pokemonArray.map((pokemon) => (
-    <div
-      key={pokemon.name}
-      className="card"
-      onClick={() => cardClick(pokemon.name)}
-    >
-      <img src={pokemon.sprite} alt={pokemon.name} />
-      <p className="name">
-        {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
-      </p>
-    </div>
-  ));
+  return (
+    <>
+      <Win score={score} setScore={setScore} setGameArray={setGameArray} setMaxScore={setMaxScore} setGameStart={setGameStart} gameStart={gameStart}/>
+      {pokemonArray.map((pokemon) => (
+        <div
+          key={pokemon.name}
+          className="card"
+          onClick={() => cardClick(pokemon.name)}
+        >
+          <img src={pokemon.sprite} alt={pokemon.name} />
+          <p className="name">
+            {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+          </p>
+        </div>
+      ))}
+    </>
+  );
 }

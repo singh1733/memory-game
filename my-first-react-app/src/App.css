@@ -71,11 +71,10 @@ button {
 }
 
 .press-start-2p-regular {
-    font-family: "Press Start 2P", system-ui;
-    font-weight: 400;
-    font-style: normal;
-  }
-  
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
 
 body {
   padding: 10px;
@@ -84,8 +83,7 @@ body {
   background-size: contain;
   height: 100vh;
   color: white;
-  font-family:"Press Start 2P", serif ;
-
+  font-family: "Press Start 2P", serif;
 }
 
 .gameBoard {
@@ -134,18 +132,42 @@ body {
   grid-column: 2/3;
 }
 
-.game{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr;
-    gap: 10px;
+.game {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  gap: 10px;
 }
 
-.title{
-    font-size: 30px;
+.title {
+  font-size: 30px;
 }
 
-.description{
-    font-size: 15px;
-    margin-bottom: 20px;
+.description {
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+dialog {
+  align-self: center;
+  justify-self: center;
+  padding: 20px;
+  background-color: #ffcb05;
+  color: white;
+  border-radius: 10px;
+  font-size: 50px;
+  text-align: center;
+}
+
+dialog button, dialog p {
+  animation: blink .5s steps(3, start) infinite alternate;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
