@@ -1,18 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PokeArray } from "./components/pokeArray.jsx";
 import "./App.css";
-
-function NewGame({ lose, score, bestScore }) {
-  useEffect(() => {
-    //code to start new game
-  }, [lose]);
-}
-
-function RandomBoard({ score }) {
-  useEffect(() => {
-    //code to random board
-  }, [score]);
-}
 
 export default function App() {
   //an array to keep user's picks
@@ -24,15 +12,22 @@ export default function App() {
 
   return (
     <div className="game">
-    <PokeArray
-      score={score}
-      setScore={setScore}
-      maxScore={maxScore}
-      setMaxScore={setMaxScore}
-    />
-    <p>{score}</p>
-    <p>{maxScore}</p>
-
+      <p className="title">Pokemon Memory Game</p>
+      <p className="description">
+        Get points by clicking on an image but don't click on the same one twice!
+      </p>
+      <div className="score">
+        <p>Score: {score}</p>
+        <p>Max Score: {maxScore}</p>
+      </div>
+      <div className="gameBoard">
+        <PokeArray
+          score={score}
+          setScore={setScore}
+          maxScore={maxScore}
+          setMaxScore={setMaxScore}
+        />
+      </div>
     </div>
   );
 }

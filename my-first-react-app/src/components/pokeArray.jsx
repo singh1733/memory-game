@@ -4,7 +4,8 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
   const [pokemonArray, setPokemonArray] = useState([]);
 
   async function pokemonGetter() {
-    let pokemonNumber = Math.floor(Math.random() * 151);
+    //+1 to avoid 0
+    let pokemonNumber = Math.floor(Math.random() * 150) + 1;
     let pokemonData = await fetch(
       "https://pokeapi.co/api/v2/pokemon/" + pokemonNumber
     ).then((response) => response.json());
@@ -14,9 +15,9 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
       sprite: pokemonData.sprites.front_default,
     };
   }
-  let tempPokeArray = [];
 
   async function pokemonArrayCreator() {
+    let tempPokeArray = [];
     while (tempPokeArray.length < 10) {
       let pokemonPick = await pokemonGetter();
       if (!tempPokeArray.some((pokemon) => pokemon.name === pokemonPick.name)) {
@@ -35,13 +36,21 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
   const [gameArray, setGameArray] = useState([]);
 
   function cardClick(name) {
-    let temp = gameArray;
+    let temp = [...gameArray];
     if (!temp.includes(name)) {
       temp.push(name);
       setGameArray(temp);
       setScore(score + 1);
       currentGameRandomizer();
+      if (score === 10) {
+        console.log("you win");
+        setLoseToggle(!loseToggle);
+        setMaxScore(10);
+        setGameArray([]);
+        setScore(0);
+      }
     } else {
+      setGameArray([]);
       setLoseToggle(!loseToggle);
       setMaxScore(Math.max(score, maxScore));
       setScore(0);
@@ -49,8 +58,8 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
   }
 
   function currentGameRandomizer() {
-    let randomPokeArray=[]
-    const arrayIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let randomPokeArray = [];
+    const arrayIndices = Array.from({ length: 10 }, (_, i) => i);
     for (let i = 9; i >= 0; i--) {
       let randomIndex = Math.ceil(Math.random() * i);
       randomPokeArray.push(pokemonArray[arrayIndices[randomIndex]]);
@@ -66,7 +75,9 @@ export function PokeArray({ score, setScore, maxScore, setMaxScore }) {
       onClick={() => cardClick(pokemon.name)}
     >
       <img src={pokemon.sprite} alt={pokemon.name} />
-      <p className="name">{pokemon.name}</p>
+      <p className="name">
+        {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+      </p>
     </div>
   ));
 }
